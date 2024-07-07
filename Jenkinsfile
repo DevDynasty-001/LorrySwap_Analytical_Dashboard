@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        nodejs 'NODEJS 22' // Name of the NodeJS installation configured in Jenkins
+    }
     environment {
         VPS_USER = 'root'
         VPS_IP = '104.168.5.251'
