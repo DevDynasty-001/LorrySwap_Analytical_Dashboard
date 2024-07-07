@@ -59,7 +59,7 @@ pipeline {
         VPS_IP = '104.168.5.251'
         PROJECT_DIR = '~/LorrySwap_Analytical_Dashboard'
         SSH_CREDENTIALS_ID = 'github_ssh_key' // ID for your SSH credentials
-        NODEJS_HOME = tool name: 'NodeJS_22', type: 'NodeJSInstallation'
+        NODEJS_HOME = tool name: '22.4.0', type: 'NodeJSInstallation'
     }
     stages {
         stage('Checkout') {
