@@ -59,7 +59,6 @@ pipeline {
         VPS_IP = '104.168.5.251'
         PROJECT_DIR = '~/LorrySwap_Analytical_Dashboard'
         SSH_CREDENTIALS_ID = 'github_ssh_key' // ID for your SSH credentials
-        NODEJS_HOME = tool name: '22.4.0', type: 'NodeJSInstallation'
     }
     stages {
         stage('Checkout') {
@@ -69,17 +68,18 @@ pipeline {
         }
         stage('Setup Node.js') {
             steps {
-                script {
-                    env.PATH = "${env.NODEJS_HOME}/bin:${env.PATH}"
+                nodejs(nodeJSInstallationName: '22.4.0') {
+                    sh 'node -v'
+                    sh 'npm -v'
                 }
-                sh 'node -v'
-                sh 'npm -v'
             }
         }
         stage('Build') {
             steps {
-                sh 'npm install'
-                sh 'CI=false npm run build' // Disables treating warnings as errors
+                nodejs(nodeJSInstallationName: '22.4.0') {
+                    sh 'npm install'
+                    sh 'CI=false npm run build' // Disables treating warnings as errors
+                }
             }
         }
         stage('Deploy') {
@@ -102,3 +102,4 @@ pipeline {
         }
     }
 }
+
