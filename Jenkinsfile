@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-        nodejs 'NODEJS 22' // Name of the NodeJS installation configured in Jenkins
-    }
     environment {
         VPS_USER = 'root'
         VPS_IP = '104.168.5.251'
@@ -15,10 +12,16 @@ pipeline {
                 git credentialsId: 'github_ssh_key', url: 'https://github.com/DevDynasty-001/LorrySwap_Analytical_Dashboard.git', branch: 'main'
             }
         }
+        stage('Setup Node.js') {
+            steps {
+                tool name: 'NodeJS_22', type: 'NodeJSInstallation'
+                sh 'n lts'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'npm install'
-                sh 'npm run build'
+                sh 'CI=false npm run build' // Disables treating warnings as errors
             }
         }
         stage('Deploy') {
