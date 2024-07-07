@@ -40,7 +40,7 @@ function Home() {
         <div className="container d-flex flex-column align-items-center">
           <h2>Welcome To</h2>
           <h1 className="text-center fw-semibold align-items-center">
-            LorrySwap Prediction
+            LorrySwap Analytics
           </h1>
           <p>
             We offer comprehensive reports and predictive analytics to help you
