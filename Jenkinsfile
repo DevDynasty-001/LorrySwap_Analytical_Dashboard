@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Setup Node.js') {
             steps {
-                tool name: 'NodeJS 22', type: 'NodeJSInstallation'
+                tool name: '22.4.0', type: 'NodeJSInstallation'
                 sh 'n lts'
             }
         }
