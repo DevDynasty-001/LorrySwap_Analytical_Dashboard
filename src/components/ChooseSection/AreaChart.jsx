@@ -33,7 +33,7 @@ const AreaChartComponent = () => {
   }, []);
 
   const fetchEconomicCenters = () => {
-    fetch("http://localhost:8000/economicCenter")
+    fetch("https://lorryswapbackendtest2.azurewebsites.net/economicCenter")
       .then((response) => response.json())
       .then((data) => {
         console.log("Economic Centers Data:", data);
@@ -45,7 +45,7 @@ const AreaChartComponent = () => {
   };
 
   const fetchItems = () => {
-    fetch("http://localhost:8000/item")
+    fetch("https://lorryswapbackendtest2.azurewebsites.net/item")
       .then((response) => response.json())
       .then((data) => {
         console.log("Items Data:", data);
@@ -58,7 +58,7 @@ const AreaChartComponent = () => {
     event.preventDefault();
     if (selectedEconomicCenter && selectedYear && selectedItem) {
       fetch(
-        `http://localhost:8000/analytical/generate_report/${selectedEconomicCenter}/${selectedItem}/${selectedYear}`,
+        `https://lorryswapbackendtest2.azurewebsites.net/analytical/generate_report/${selectedEconomicCenter}/${selectedItem}/${selectedYear}`,
         {
           method: "GET",
         }
