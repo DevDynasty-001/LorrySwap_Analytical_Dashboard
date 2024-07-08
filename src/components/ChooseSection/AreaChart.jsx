@@ -24,6 +24,8 @@ const AreaChartComponent = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [monthlyReports, setMonthlyReports] = useState([]);
   const [annualReports, setAnnualReports] = useState([]);
+  const [monthlySupply, setMonthlySupply] = useState([]);
+  const [annualSupply, setAnnualSupply] = useState([]);
 
   useEffect(() => {
     fetchEconomicCenters();
@@ -73,27 +75,46 @@ const AreaChartComponent = () => {
           // Separate monthly and annual reports based on the type field in API response
           const monthlyData = data.monthly_report;
           const annualData = data.annual_report;
+          const monthlySupply = data.monthly_supply;
+          const annualSupply = data.annual_supply;
 
-          setMonthlyReports(monthlyData);
-          setAnnualReports(annualData);
+          // Combine monthly report and monthly supply data
+          const combinedMonthlyData = monthlyData.map((item, index) => ({
+            month: item.month,
+            Demand: item.Demand,
+            Supply: monthlySupply[index]?.Supply || 0,
+          }));
+
+          // Combine annual report and annual supply data
+          const combinedAnnualData = annualData.map((item, index) => ({
+            year: item.year,
+            Demand: item.Demand,
+            Supply: annualSupply[index]?.Supply || 0,
+          }));
+
+          setMonthlyReports(combinedMonthlyData);
+          setAnnualReports(combinedAnnualData);
         })
         .catch((error) => console.error("Error fetching reports:", error));
     }
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="p-4 bg-gray-900 text-white rounded-md">
-          <p className="text-lg">{label}</p>
-          <p className="text-blue-400">
-            Quantity: <span className="ml-2">{payload[0].value}</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+ const CustomTooltip = ({ active, payload, label }) => {
+   if (active && payload && payload.length) {
+     return (
+       <div className="p-4 bg-gray-900 text-black rounded-md">
+         {" "}
+         <p className="text-blue-400">
+           Demand: <span className="ml-2">{payload[0].value}</span>
+         </p>
+         <p className="text-green-400">
+           Supply: <span className="ml-2">{payload[1].value}</span>
+         </p>
+       </div>
+     );
+   }
+   return null;
+ };
 
   return (
     <div>
@@ -173,7 +194,7 @@ const AreaChartComponent = () => {
             />
             <YAxis
               label={{
-                value: "Quantity",
+                value: "Demand / Supply",
                 angle: -90,
                 position: "insideLeft",
               }}
@@ -182,10 +203,17 @@ const AreaChartComponent = () => {
             <Legend />
             <Area
               type="monotone"
-              dataKey="quantity"
-              stroke="#2563eb"
-              fill="#3b82f6"
+              dataKey="Demand"
+              stroke="red"
               stackId="1"
+              fill="red"
+            />
+            <Area
+              type="monotone"
+              dataKey="Supply"
+              stroke="#82ca9d"
+              stackId="2"
+              fill="#82ca9d"
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -208,7 +236,7 @@ const AreaChartComponent = () => {
             />
             <YAxis
               label={{
-                value: "Quantity",
+                value: "Demand / Supply",
                 angle: -90,
                 position: "insideLeft",
               }}
@@ -217,10 +245,17 @@ const AreaChartComponent = () => {
             <Legend />
             <Area
               type="monotone"
-              dataKey="quantity"
+              dataKey="Demand"
               stroke="#2563eb"
-              fill="#3b82f6"
               stackId="1"
+              fill="#2563eb"
+            />
+            <Area
+              type="monotone"
+              dataKey="Supply"
+              stroke="#82ca9d"
+              stackId="2"
+              fill="#82ca9d"
             />
           </AreaChart>
         </ResponsiveContainer>
